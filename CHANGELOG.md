@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.1.0] - 2019-08-03
+### Added
+- '-s, --separator' option
+### Changed
+- new docopt parser http://docopt.org/
+
 ## [1.0.0] - 2019-07-31
 ### Added
 - function split(number) which splits numbers into separated groups of digits
