@@ -1,10 +1,23 @@
 #!/usr/bin/env python3
 
-import argparse
+"""splitn
+
+Usage:
+    splitn [-s SEP] <number>
+    splitn --version
+    splitn -h
+
+Options:
+    -s SEP --separator=SEP  Choose separator [default:  ]
+    -h --help               Show this screen
+    --version               Show version
+"""
+
+from docopt import docopt
 from itertools import combinations
 
 
-def split(number):
+def split(number, separator):
     print(number)
     n = len(number)
     for k in range(1, n):
@@ -15,18 +28,15 @@ def split(number):
                 new_number.append(number[begin:position+1])
                 begin = position + 1
             new_number.append(number[position+1:])
-            print(" ".join(new_number))
+            print(str(separator).join(new_number))
 
             " ".join
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('number', metavar='N', type=str, help='Number to split')
-    args = parser.parse_args()
-
-    number = args.number
-
-    split(number)
+    arguments = docopt(__doc__, version='1.1.0')
+    number = arguments['<number>']
+    separator = arguments['--separator']
+    split(number, separator)
 
 if __name__ == "__main__":
     main()
