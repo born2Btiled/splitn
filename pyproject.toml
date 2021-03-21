@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "splitn"
+version = "0.1.0"
+description = ""
+authors = ["Michał Warzocha <warzocha.michal@icloud.com>"]
+readme = "README.md"
+
+[tool.poetry.scripts]
+splitn = "splitn.main:app"
+
+[tool.poetry.dependencies]
+python = "^3.6"
+typer = {extras = ["all"], version = "^0.3.2"}
+
+[tool.poetry.dev-dependencies]
+pytest = "^4.6"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
