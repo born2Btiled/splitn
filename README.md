@@ -1,5 +1,5 @@
 
-`splitn` is a CLI app for generating the list of combinations of digits in a given number. It's made for testing a number parsing applications, especially in the NLU field (e.g. voicebots, chatbots or tools for extracting structural data from text like [duckling](https://github.com/facebook/duckling).
+`splitn` is a CLI app that generates sequences of random digits with given length and every combination being a result of splitting these digits. It's mainly made for testing number parsing applications, especially in the NLU field (e.g. voicebots, chatbots or tools for extracting structural data from text like [duckling](https://github.com/facebook/duckling).
 
 # Requirements
 
@@ -8,13 +8,13 @@
 # Examples
 ## Basic usage
 ```bash
-splitn 123
+splitn 3
 
 # result
-123
-12 3
-1 23
-1 2 3
+486
+48 6
+4 86
+4 8 6
 ```
 
 
