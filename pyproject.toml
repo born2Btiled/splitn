@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "splitn"
-version = "0.1.0"
+version = "2.0.2"
 description = ""
 authors = ["Michał Warzocha <warzocha.michal@icloud.com>"]
 readme = "README.md"
@@ -9,12 +9,17 @@ readme = "README.md"
 splitn = "splitn.main:app"
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.9"
 typer = {extras = ["all"], version = "^0.3.2"}
+rstr = "^3.0.0"
+loguru = "^0.5.3"
+split = "split:main"
+sequences = "sequences:main"
 
 [tool.poetry.dev-dependencies]
+flake8 = "^3.9.0"
 pytest = "^4.6"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=1.1.0"]
 build-backend = "poetry.core.masonry.api"
