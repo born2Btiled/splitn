@@ -1,14 +1,20 @@
-
-`splitn` is a CLI app that generates sequences of random digits with given length and every combination being a result of splitting these digits. It's mainly made for testing number parsing applications, especially in the NLU field (e.g. voicebots, chatbots or tools for extracting structural data from text like [duckling](https://github.com/facebook/duckling).
-
-# Requirements
+`splitn` is a CLI app that generates combinations of chars being a result of splitting strings provided *explicite* or randomly generated from regex patterns. It is made mainly for testing NLU applications, e.g. voicebots, chatbots or tools for extracting structural data from text like [duckling](https://github.com/facebook/duckling).
 
 # Installation
+```
+pipx install splitn
+```
+
+or
+
+```
+pip install splitn
+```
 
 # Examples
 ## Basic usage
 ```bash
-splitn 3
+splitn 486
 
 # result
 486
@@ -16,5 +22,3 @@ splitn 3
 4 86
 4 8 6
 ```
-
-

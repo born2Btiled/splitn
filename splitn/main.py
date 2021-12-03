@@ -1,85 +1,57 @@
-from itertools import chain, combinations, repeat
-from collections.abc import Generator
-from copy import deepcopy
-from random import randint
-from re import compile
-
 import typer
+from splitn.sequences import random_sequence
+from splitn.split import splitted
+from loguru import logger
+from random import seed
 
-class CombinationsGenerator():
-    def __init__(self, seed: str, separator: str) -> None:
-        self.seed = seed
-        self.separator = separator
-        self.length = len(self.seed)
-        self.digits = [digit for digit in self.seed]
-
-    def combinations(self) -> Generator[str, None, None]:
-        for k in range(0, self.length):
-            if not k:
-                yield self.seed
-            else:
-                for pattern in combinations(range(1, self.length), k):
-                    yield self.split_n(pattern)
-
-    def split_n(self, pattern: tuple[int, ...]) -> str:
-        combination = deepcopy(self.digits)
-        for position, i in zip(pattern, range(len(pattern))):
-            combination.insert(position + i, self.separator)
-        return "".join(combination)
-
-class RandomNumbersGenerator():
-    def __init__(self, length:int) -> None:
-        self.length = length
-
-    def random_number(self) -> str:
-        return "".join([str(randint(0,9)) for _ in repeat(None, self.length)])
-
+@logger.catch
+def generate_output(
+        operand: str,
+        separator: str,
+        as_pattern: bool,
+        times: int
+    ):
+    for counter in range(times):
+        sequence = random_sequence(operand) if as_pattern else operand
+        for splitted_sequence in splitted(sequence, separator):
+            typer.echo(splitted_sequence)
+        if counter < times - 1:
+            typer.echo()
 
 app = typer.Typer()
 
 @app.command()
-def main(operands: list[str] = typer.Argument(None,
-                                              help="Each operand can be an integer or a range of integers written as 'L..R', where L and R are respectively left and right end of a range. Each integer defines length of randomly generated sequence of digits. For example, calling 'splitn 2..5' will produce four random sequences consisted of 2,3,4 and 5 digits and every combination being a result of splitting these digits."),
-         separator: str = typer.Option(" ",
-                                       "--separator", "-s",
-                                       help="Separator used in splitting generated sequences"),
-         random: bool = typer.Option(False,
-                                     "--random-only", "-r",
-                                     help="Avoid splitting generated sequences"),
-         times: int = typer.Option(1,
-                                   "--times", "-t",
-                                   help="Number of times splitn should generate sequences according to provided specification")):
-    
-    input = chain()
-    range_pattern = compile(r"^(\d+)\.+(\d+)$")
-    for operand in operands:
-        if not operand.isdigit():
-            match = range_pattern.match(operand)
-            if match:
-                left = int(match.group(1))
-                right = int(match.group(2))
-                if left <= right:
-                    for o in range(left, right + 1):
-                        input = chain(input, [o])
-                else:
-                    exit("Error: Invalid value for operand: in range '{}' left end is bigger then right end")
-            else:
-                exit("Error: Invalid value for operand: '{}' is not a valid integer or range of integers".format(operand))
-        else:
-            input = chain(input, [operand])
+def main(operands: list[str] = typer.Argument(
+            None,
+            help='List of strings to be splitted or regexes describing desired strings (when -p flag is on).'
+        ),
+        separator: str = typer.Option(
+            ' ',
+            '--separator', '-s',
+            help='Separator used in splitting generated sequences.'
+        ),
+        as_pattern: bool = typer.Option(
+            False,
+            '--pattern', '-p',
+            help='Treat given operands as regular expressions defining strings to be splitted.'
+        ),
+        times: int = typer.Option(
+            1,
+            '--times', '-t',
+            help='Number of times splitn generates sequences for each specification.'
+        )
+    ):
+    if not operands:
+        raise typer.Exit()
+    else:
+        operands_counter = range(len(operands), 0, -1)
+        for operand, counter in zip(operands, operands_counter):
+            try:
+                generate_output(operand, separator, as_pattern, times)
+                if counter > 1:
+                    typer.echo()
+            except Exception as e:
+                raise typer.Abort('Program aborted with exception: %s.'.format(e))
 
-    output = chain()
-    number = new_number = ''
-    for operand in input:
-        for _ in repeat(None, times):
-            while new_number == number:
-                new_number = RandomNumbersGenerator(int(operand)).random_number()
-            number = new_number 
-            output = chain(output,
-                          [number] if random else CombinationsGenerator(number, separator).combinations())
-
-    for line in output:
-        typer.echo(line)
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     app()
