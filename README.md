@@ -1,4 +1,4 @@
-`splitn` is a CLI app that generates combinations of chars being a result of splitting strings provided *explicite* or randomly generated from regex patterns. It is made mainly for testing NLU applications, e.g. voicebots, chatbots or tools for extracting structural data from text like [duckling](https://github.com/facebook/duckling).
+`splitn` is a CLI application that generates combinations of chars being a result of splitting strings provided *explicite* or randomly generated from regex patterns. It is made mainly for testing NLU applications, e.g. chatbots or tools for extracting structural data from text like [duckling](https://github.com/facebook/duckling).
 
 # Installation
 ```
