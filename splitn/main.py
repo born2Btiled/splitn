@@ -1,57 +1,96 @@
 import typer
-from splitn.sequences import random_sequence
-from splitn.split import splitted
+from typing_extensions import Annotated
+
+from os import path
+from re import fullmatch
+
 from loguru import logger
-from random import seed
+
+from utils.sequences import random_sequence
+from utils.split import splitted
 
 @logger.catch
 def generate_output(
-        operand: str,
-        separator: str,
-        as_pattern: bool,
-        times: int
-    ):
-    for counter in range(times):
-        sequence = random_sequence(operand) if as_pattern else operand
-        for splitted_sequence in splitted(sequence, separator):
-            typer.echo(splitted_sequence)
-        if counter < times - 1:
-            typer.echo()
+    operand: str,
+    separator: str,
+    times: int,
+    as_string: bool
+) -> None:
+    try:
+        if as_string or detect_string(operand):
+            # handle simple strings
+            generate_splitted_sequences(operand, separator)
+        else: 
+            # handle regular expressions
+            for counter in range(times):
+                sequence = random_sequence(operand)
+                generate_splitted_sequences(sequence, separator)
+                if counter < times - 1:
+                    print()
+    except Exception as e:
+        raise typer.Abort(f"Program aborted with exception: {e}.")
+
+@logger.catch
+def generate_splitted_sequences(
+    sequence: str,
+    separator: str
+) -> None:
+    for splitted_sequence in splitted(sequence, separator):
+        print(splitted_sequence)
+
+@logger.catch
+def detect_string(
+    input: str
+) -> bool:
+    try:
+        return True if fullmatch(input, input) else False
+    except:
+        return False
 
 app = typer.Typer()
 
 @app.command()
-def main(operands: list[str] = typer.Argument(
-            None,
-            help='List of strings to be splitted or regexes describing desired strings (when -p flag is on).'
-        ),
-        separator: str = typer.Option(
-            ' ',
-            '--separator', '-s',
-            help='Separator used in splitting generated sequences.'
-        ),
-        as_pattern: bool = typer.Option(
-            False,
-            '--pattern', '-p',
-            help='Treat given operands as regular expressions defining strings to be splitted.'
-        ),
-        times: int = typer.Option(
-            1,
-            '--times', '-t',
-            help='Number of times splitn generates sequences for each specification.'
-        )
-    ):
-    if not operands:
-        raise typer.Exit()
-    else:
-        operands_counter = range(len(operands), 0, -1)
-        for operand, counter in zip(operands, operands_counter):
-            try:
-                generate_output(operand, separator, as_pattern, times)
-                if counter > 1:
-                    typer.echo()
-            except Exception as e:
-                raise typer.Abort('Program aborted with exception: %s.'.format(e))
+def main(
+    operands: Annotated[list[str], typer.Argument(
+        help="""
+        List of strings, regular expressions or files.
 
-if __name__ == '__main__':
+        Provided files should contain a list of strings or regular expressions.
+
+        Regular expressions should have "\\" escaped (eg. "\\\\d") or be inside quotes.
+
+        Given operands are treated as regular expressions by default.
+        """
+    )],
+    separator: Annotated[str, typer.Option(
+        "--separator", "-s",
+        help="Separator used in splitting generated sequences."
+    )] = " ",
+    times: Annotated[int, typer.Option(
+        "--times", "-t",
+        help="Number of times splitn generates sequences for each specification. Applied only for regular expressions."
+    )] = 1,
+    secondary_separator: Annotated[str, typer.Option(
+        "--secondary-separator",
+        help="Separator used to separate outputs from different provided specifications. Use empty string for having new line."
+    )] = "---",
+    as_string: Annotated[bool, typer.Option(
+        "--as-string",
+        help="Interpret provided operands as simple strings."
+    )] = False
+):
+    for operand, counter in zip(operands, range(len(operands), 0, -1)):
+        if path.exists(operand):
+            with open(operand) as file:
+                lines = file.readlines()
+                for line, line_counter in zip(lines, range(len(lines), 0, -1)):
+                    generate_output(line.strip(), separator, times, as_string)
+                    if line_counter > 1:
+                        print(secondary_separator)
+        else:
+            generate_output(operand, separator, times, as_string)
+        if counter > 1:
+            print(secondary_separator)
+
+if __name__ == "__main__":
     app()

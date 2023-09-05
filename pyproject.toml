@@ -1,25 +1,23 @@
 [tool.poetry]
 name = "splitn"
-version = "2.0.2"
-description = ""
+version = "3.0.0"
+description = "splitn is a CLI application that generates combinations of chars being a result of splitting strings"
 authors = ["Michał Warzocha <warzocha.michal@icloud.com>"]
+license = "MIT"
 readme = "README.md"
 
 [tool.poetry.scripts]
 splitn = "splitn.main:app"
 
 [tool.poetry.dependencies]
-python = "^3.9"
-typer = {extras = ["all"], version = "^0.3.2"}
-rstr = "^3.0.0"
-loguru = "^0.5.3"
-split = "split:main"
-sequences = "sequences:main"
+python = "^3.11"
+typer = {extras = ["all"], version = "^0.9.0"}
+loguru = "^0.7.1"
+rstr = "^3.2.1"
 
 [tool.poetry.dev-dependencies]
-flake8 = "^3.9.0"
-pytest = "^4.6"
+pytest = "^7.4.1"
 
 [build-system]
-requires = ["poetry-core>=1.1.0"]
+requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

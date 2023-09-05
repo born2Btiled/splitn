@@ -1,7 +1,10 @@
-from splitn import sequences
+from utils import sequences
+from random import seed
 
-def test_random_sequence_return_type():
-    assert isinstance(sequences.random_sequence(r'\d[a-d]{4,7}'), str)
+INPUT = "\\d[a-d]{4,7}"
+OUTPUT = "6acddcdc"
 
-def test_random_sequence_sequence_length():
-    assert len(sequences.random_sequence(r'a{4}')) == 4
+def test_random_sequence():
+    seed(0)
+    assert sequences.random_sequence("\\d[a-d]{4,7}") == OUTPUT
+
