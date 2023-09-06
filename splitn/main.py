@@ -8,7 +8,7 @@ from re import fullmatch
 from loguru import logger
 
 from utils.sequences import random_sequence
-from utils.split import splitted
+from utils.split import split_sequences
 
 @logger.catch
 def generate_output(
@@ -21,32 +21,32 @@ def generate_output(
     try:
         if as_string or detect_string(operand):
             # handle simple strings
-            generate_splitted_sequences(operand, separator, patterns)
+            generate_split_sequences(operand, separator, patterns)
         else: 
             # handle regular expressions
             for counter in range(times):
                 sequence = random_sequence(operand)
-                generate_splitted_sequences(sequence, separator, patterns)
+                generate_split_sequences(sequence, separator, patterns)
                 if counter < times - 1:
                     print()
     except Exception as e:
         raise typer.Abort(f"Program aborted with exception: {e}.")
 
 @logger.catch
-def generate_splitted_sequences(
+def generate_split_sequences(
     sequence: str,
     separator: str,
     patterns: list[str] | None
 ) -> None:
-    for splitted_sequence in splitted(sequence, separator):
+    for split_sequence in split_sequences(sequence, separator):
         printable: bool = False if patterns else True
         if patterns:
             for pattern in patterns:
-                printable = fullmatch(pattern, splitted_sequence.strip())
+                printable = fullmatch(pattern, split_sequence.strip())
                 if printable:
                     break
         if printable:
-            print(splitted_sequence)
+            print(split_sequence)
 
 @logger.catch
 def detect_string(
