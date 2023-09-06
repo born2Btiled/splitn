@@ -11,9 +11,9 @@ PATTERNS = (
     (0,1)
 )
 
-def test_split():
+def test_split() -> None:
     assert split.split(SEQUENCE, PATTERN, SEPARATOR) == OUTPUT
 
-def test_patterns():
+def test_patterns() -> None:
     for produced, expected in zip(split.patterns(3), PATTERNS):
         assert produced == expected
