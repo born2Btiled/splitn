@@ -12,7 +12,7 @@ from loguru import logger
 from utils.sequences import random_sequence
 from utils.split import split_sequences
 
-VERSION = "3.1.0"
+VERSION = "3.2.0"
 
 DESCRIPTION = """
 [underline]splitn[/underline] - a CLI application that generates combinations of chars being a result of splitting strings
