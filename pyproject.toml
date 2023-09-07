@@ -8,7 +8,7 @@ readme = "README.md"
 repository = "https://github.com/born2Btiled/splitn"
 
 [tool.poetry.scripts]
-splitn = "splitn.main"
+splitn = "splitn.main:main"
 
 [tool.poetry.dependencies]
 python = "^3.11"
