@@ -108,7 +108,8 @@ def main(
                 print(secondary_separator)
     elif patterns:
         for pattern, counter in zip(patterns, range(len(patterns), 0, -1)):
-            print(random_sequence(pattern))
+            for time in range(times):
+                print(random_sequence(pattern))
         if counter > 1:
             print(secondary_separator)
     else:
