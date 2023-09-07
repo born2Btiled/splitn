@@ -93,6 +93,52 @@ OPTIONS.add_row(
     "Show this message."
 )
 
+parser = argparse.ArgumentParser(
+        prog="splitn",
+        usage="%(prog)s [options] [operands ...] [--pattern | -p <regexes> ...]",
+        add_help=False,
+        allow_abbrev=False
+    )
+parser.add_argument(
+    "operands",
+    nargs="*",
+    type=str
+)
+parser.add_argument(
+    "--separator", "-s",
+    default=" ",
+    type=str
+)
+parser.add_argument(
+    "--times", "-t",
+    default=1,
+    type=int
+)
+parser.add_argument(
+    "--secondary-separator",
+    default="---",
+    type=str
+)
+parser.add_argument(
+    "--as-string",
+    action="store_true"
+)
+parser.add_argument(
+    "--pattern", "-p",
+    nargs="*",
+    default=None,
+    type=str
+)
+parser.add_argument(
+    "--version", "-v",
+    action="version",
+    version="%(prog)s " + VERSION
+)
+parser.add_argument(
+    "--help", "-h",
+    action="store_true"
+)
+
 console = Console()
 
 @logger.catch
@@ -124,13 +170,13 @@ def generate_split_sequences(
     patterns: list[str] | None
 ) -> None:
     for split_sequence in split_sequences(sequence, separator):
-        console.printable: bool = False if patterns else True
+        printable: bool = False if patterns else True
         if patterns:
             for pattern in patterns:
-                console.printable = fullmatch(pattern, split_sequence.strip())
-                if console.printable:
+                printable = fullmatch(pattern, split_sequence.strip())
+                if printable:
                     break
-        if console.printable:
+        if printable:
             console.print(split_sequence)
 
 @logger.catch
@@ -144,52 +190,6 @@ def detect_string(
 
 @logger.catch
 def main(args=argv[1:]) -> None:
-    parser = argparse.ArgumentParser(
-        prog="splitn",
-        usage="%(prog)s [options] [operands ...] [--pattern | -p <regexes> ...]",
-        add_help=False,
-        allow_abbrev=False
-    )
-    parser.add_argument(
-        "operands",
-        nargs="*",
-        type=str
-    )
-    parser.add_argument(
-        "--separator", "-s",
-        default=" ",
-        type=str
-    )
-    parser.add_argument(
-        "--times", "-t",
-        default=1,
-        type=int
-    )
-    parser.add_argument(
-        "--secondary-separator",
-        default="---",
-        type=str
-    )
-    parser.add_argument(
-        "--as-string",
-        action="store_true"
-    )
-    parser.add_argument(
-        "--pattern", "-p",
-        nargs="*",
-        default=None,
-        type=str
-    )
-    parser.add_argument(
-        "--version", "-v",
-        action="version",
-        version="%(prog)s " + VERSION
-    )
-    parser.add_argument(
-        "--help", "-h",
-        action="store_true"
-    )
-
     args = parser.parse_args(args)
 
     if args.help:
