@@ -19,7 +19,7 @@ OUTPUT_5 = "47 5\n"
 
 OUTPUT_6 = "12 3\n"
 
-def test_app(capsys) -> None:
+def test_main(capsys) -> None:
     seed(0)
     with pytest.raises(SystemExit) as e:
         main([INPUT_1])
@@ -40,7 +40,7 @@ def test_two_operands(capsys) -> None:
     with pytest.raises(SystemExit) as e:
         main([INPUT_1, INPUT_2])
     captured = capsys.readouterr()
-    assert captured.out == OUTPUT_1 + SECONDARY_SEPARATOR + OUTPUT_2
+    assert captured.out == f"{OUTPUT_1}{SECONDARY_SEPARATOR}{OUTPUT_2}"
 
 def test_separator(capsys) -> None:
     with pytest.raises(SystemExit) as e:
@@ -53,7 +53,7 @@ def test_times(capsys) -> None:
     with pytest.raises(SystemExit) as e:
         main(["--times", "2", INPUT_2])
     captured = capsys.readouterr()
-    assert captured.out == OUTPUT_2 + "\n" + OUTPUT_3
+    assert captured.out == f"{OUTPUT_2}\n{OUTPUT_3}"
 
 def test_pattern(capsys) -> None:
     with pytest.raises(SystemExit) as e:

@@ -12,11 +12,14 @@ def random_sequence(pattern: str) -> str:
         return ""
 
 @logger.catch
-def main():
+def main(
+    arg: str
+) -> None:
     try:
-        print(random_sequence(str(sys.argv[1])))
-    except:
-        return 1
+        print(random_sequence(arg))
+        sys.exit(0)
+    except Exception:
+        sys.exit(1)
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main(sys.argv[1])

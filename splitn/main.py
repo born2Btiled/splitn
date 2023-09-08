@@ -132,7 +132,7 @@ parser.add_argument(
 parser.add_argument(
     "--version", "-v",
     action="version",
-    version="%(prog)s " + VERSION
+    version=f"%(prog)s {VERSION}"
 )
 parser.add_argument(
     "--help", "-h",
@@ -170,7 +170,7 @@ def generate_split_sequences(
     patterns: list[str] | None
 ) -> None:
     for split_sequence in split_sequences(sequence, separator):
-        printable: bool = False if patterns else True
+        printable: bool = not patterns
         if patterns:
             for pattern in patterns:
                 printable = fullmatch(pattern, split_sequence.strip())
@@ -184,12 +184,14 @@ def detect_string(
     input: str
 ) -> bool:
     try:
-        return True if fullmatch(input, input) else False
-    except:
+        return bool(fullmatch(input, input))
+    except Exception:
         return False
 
 @logger.catch
-def main(args=argv[1:]) -> None:
+def main(
+    args: list[str] = argv[1:]
+) -> None:
     args = parser.parse_args(args)
 
     if args.help:
@@ -227,7 +229,7 @@ def main(args=argv[1:]) -> None:
     elif args.pattern:
         patterns: list[str] | None = args.pattern
         for pattern, counter in zip(patterns, range(len(patterns), 0, -1)):
-            for time in range(args.times):
+            for _ in range(args.times):
                 console.print(random_sequence(pattern))
         if counter > 1:
             console.print(args.secondary_separator)
