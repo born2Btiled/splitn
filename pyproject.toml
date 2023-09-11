@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "splitn"
-version = "3.2.0"
+version = "3.3.0"
 description = "splitn is a CLI application that generates combinations of chars being a result of splitting strings"
 authors = ["Michał Warzocha <warzocha.michal@icloud.com>"]
 license = "MIT"
