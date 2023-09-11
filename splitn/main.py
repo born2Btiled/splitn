@@ -8,8 +8,8 @@ from typing import Generator
 
 from loguru import logger
 
-from help import HELP, CONCISE_HELP
-from parser import parser
+from splitn.help import HELP, CONCISE_HELP
+from splitn.parser import parser
 
 from utils.sequences import random_sequence
 from utils.split import split_sequences

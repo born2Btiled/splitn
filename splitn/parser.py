@@ -1,5 +1,5 @@
 import argparse
-from version import __version__
+from splitn.version import __version__
 
 parser = argparse.ArgumentParser(
         prog="splitn",
